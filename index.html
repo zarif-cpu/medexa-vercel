@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medexa App</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background-color: #f7f9fa; padding: 20px; max-width: 480px; margin: auto; }
+        .header { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #3182ce; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;}
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">🏥 Medexa UI</div>
+    
+    <button onclick="mockCameraScan()">📷 Imbas Botol Ubat (Demo)</button>
+    
+    <input type="text" id="searchInput" placeholder="Cari ubat..." onkeyup="searchDatabase()">
+    
+    <div id="results"></div>
+
+    <script>
+        // 1. Send data to Flask to search the Excel file
+        async function searchDatabase() {
+            const query = document.getElementById('searchInput').value;
+            if (query.length < 2) {
+                document.getElementById('results').innerHTML = "";
+                return;
+            }
+
+            const response = await fetch(`/api/search?q=${query}`);
+            const data = await response.json();
+            
+            let html = "";
+            if (data.results && data.results.length > 0) {
+                data.results.forEach(item => {
+                    html += `
+                        <div class="card">
+                            <strong>💊 ${item['Nama Generik']}</strong><br>
+                            <small>${item['Jenama']}</small>
+                        </div>
+                    `;
+                });
+            } else {
+                html = "<p style='color:red;'>Tiada padanan dijumpai.</p>";
+            }
+            document.getElementById('results').innerHTML = html;
+        }
+
+        // 2. Ping Flask to run the Mock AI OCR
+        async function mockCameraScan() {
+            document.getElementById('searchInput').value = "Scanning...";
+            
+            // Wait 1 second to simulate AI processing time for the judges
+            setTimeout(async () => {
+                const response = await fetch('/api/scan', { method: 'POST' });
+                const data = await response.json();
+                
+                document.getElementById('searchInput').value = data.scanned_text;
+                searchDatabase(); // Automatically trigger search after scan
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
