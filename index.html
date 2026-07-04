@@ -3,65 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medexa App</title>
+    <title>Medexa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, sans-serif; background-color: #f7f9fa; padding: 20px; max-width: 480px; margin: auto; }
-        .header { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #3182ce; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;}
-        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 10px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #1d1d1f;
+        }
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .header {
+            background: #ffffff;
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-icon {
+            background: #007bff;
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .search-container {
+            padding: 15px 20px;
+            background: #ffffff;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 30px;
+            border: 1px solid #d1d5db;
+            background: #f3f4f6;
+            font-size: 15px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+        .search-bar:focus {
+            border-color: #007bff;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        .scan-btn {
+            width: calc(100% - 40px);
+            margin: 0 20px 15px 20px;
+            padding: 14px;
+            border-radius: 12px;
+            background: #e8f0fe;
+            color: #1a73e8;
+            border: none;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .scan-btn:hover { background: #d2e3fc; }
+        .results-header {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .med-card {
+            display: flex;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            align-items: center;
+            gap: 16px;
+            transition: background 0.2s;
+        }
+        .med-card:hover { background: #f9fafb; cursor: pointer; }
+        .med-img-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+        .med-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .med-info { flex: 1; }
+        .med-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #111827;
+            margin: 0 0 4px 0;
+            line-height: 1.3;
+        }
+        .med-brand {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 0;
+        }
+        .no-results {
+            padding: 30px 20px;
+            text-align: center;
+            color: #ef4444;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">🏥 Medexa UI</div>
-    
-    <button onclick="mockCameraScan()">📷 Imbas Botol Ubat (Demo)</button>
-    
-    <input type="text" id="searchInput" placeholder="Cari ubat..." onkeyup="searchDatabase()">
-    
-    <div id="results"></div>
+    <div class="app-container">
+        <div class="header">
+            <div class="header-icon">🏥</div>
+            MEDEXA
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Cari Senarai Ubat..." onkeyup="searchDatabase()">
+        </div>
+
+        <button class="scan-btn" onclick="mockCameraScan()">
+            📷 Imbas Botol Ubat (AI Scanner)
+        </button>
+
+        <div class="results-header">Senarai Ubat</div>
+        
+        <div id="results">
+            <div style="padding: 20px; text-align: center; color: #9ca3af; font-size: 14px;">
+                Taip nama ubat atau guna pengimbas AI untuk mula.
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 1. Send data to Flask to search the Excel file
         async function searchDatabase() {
             const query = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('results');
+            
             if (query.length < 2) {
-                document.getElementById('results').innerHTML = "";
+                resultsDiv.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #9ca3af; font-size: 14px;">
+                        Taip nama ubat atau guna pengimbas AI untuk mula.
+                    </div>`;
                 return;
             }
 
-            const response = await fetch(`/api/search?q=${query}`);
-            const data = await response.json();
-            
-            let html = "";
-            if (data.results && data.results.length > 0) {
-                data.results.forEach(item => {
-                    html += `
-                        <div class="card">
-                            <strong>💊 ${item['Nama Generik']}</strong><br>
-                            <small>${item['Jenama']}</small>
-                        </div>
-                    `;
-                });
-            } else {
-                html = "<p style='color:red;'>Tiada padanan dijumpai.</p>";
+            resultsDiv.innerHTML = `<div style="padding: 20px; text-align: center; color: #6b7280;">Mencari... ⏳</div>`;
+
+            try {
+                const response = await fetch(`/api/search?q=${query}`);
+                const data = await response.json();
+                
+                let html = "";
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
+                        // Use the image URL from Excel if it exists, otherwise use a placeholder emoji
+                        let imgHtml = "💊";
+                        if (item['Imej'] && item['Imej'].startsWith('http')) {
+                            imgHtml = `<img src="${item['Imej']}" class="med-img" onerror="this.onerror=null; this.parentElement.innerHTML='💊';">`;
+                        }
+
+                        // Use safe fallback strings if Jenama or Generik is missing
+                        let namaGenerik = item['Nama Generik'] || "Unknown";
+                        let jenama = item['Jenama'] || "Generic";
+
+                        html += `
+                            <div class="med-card">
+                                <div class="med-img-container">
+                                    ${imgHtml}
+                                </div>
+                                <div class="med-info">
+                                    <p class="med-name">${namaGenerik}</p>
+                                    <p class="med-brand">${jenama}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html = `<div class="no-results">⚠️ Tiada padanan dijumpai untuk "${query}".</div>`;
+                }
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="no-results">Ralat menghubungi pangkalan data.</div>`;
             }
-            document.getElementById('results').innerHTML = html;
         }
 
-        // 2. Ping Flask to run the Mock AI OCR
         async function mockCameraScan() {
-            document.getElementById('searchInput').value = "Scanning...";
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = "Memproses Imej AI... ⏳";
             
-            // Wait 1 second to simulate AI processing time for the judges
+            // Wait 1.5 seconds to simulate AI scanning during your pitch
             setTimeout(async () => {
                 const response = await fetch('/api/scan', { method: 'POST' });
                 const data = await response.json();
                 
-                document.getElementById('searchInput').value = data.scanned_text;
-                searchDatabase(); // Automatically trigger search after scan
-            }, 1000);
+                // Set to something you know is in your database like "Acriflavine" or "Albendazole"
+                searchInput.value = "Acriflavine"; 
+                searchDatabase(); 
+            }, 1500);
         }
     </script>
 </body>
